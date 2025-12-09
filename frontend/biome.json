@@ -38,5 +38,10 @@
 				"useSortedAttributes": "on"
 			}
 		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
 	}
 }
