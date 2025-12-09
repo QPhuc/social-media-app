@@ -1,5 +1,4 @@
 import AppRoutes from "@/routes/AppRoutes";
-import "./App.css";
 import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
