@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom"
 export default function ProtectedRoutes() {
 	//   const { user } = useAuth(); // Get user from Auth Context
 
@@ -8,5 +8,5 @@ export default function ProtectedRoutes() {
 	//   }
 
 	// Otherwise → allow access to the route
-	return <Outlet />;
+	return <Outlet />
 }
