@@ -4,13 +4,11 @@ import AppRoutes from "@/routes/AppRoutes"
 
 function App() {
 	return (
-		<>
-			<ThemeProvider>
-				<AuthProvider>
-					<AppRoutes />
-				</AuthProvider>
-			</ThemeProvider>
-		</>
+		<ThemeProvider>
+			<AuthProvider>
+				<AppRoutes />
+			</AuthProvider>
+		</ThemeProvider>
 	)
 }
 
