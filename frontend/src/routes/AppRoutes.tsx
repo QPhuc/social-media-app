@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "@/pages/Home"
+import NotFound from "@/pages/NotFound"
 import ProtectedRoutes from "./ProtectedRoutes"
 
 function AppRoutes() {
@@ -9,6 +10,8 @@ function AppRoutes() {
 				<Route element={<ProtectedRoutes />}>
 					<Route element={<Home />} path="/" />
 				</Route>
+
+				<Route element={<NotFound />} path="*" />
 			</Routes>
 		</BrowserRouter>
 	)

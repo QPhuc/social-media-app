@@ -1,12 +1,12 @@
+import { useAuth } from "@/context/AuthContext"
 import { Outlet } from "react-router-dom"
+
 export default function ProtectedRoutes() {
-	//   const { user } = useAuth(); // Get user from Auth Context
+	const { user } = useAuth()
 
-	// If no user is logged in → redirect to login page
-	//   if (!user) {
-	// return <Navigate to="/login" replace />;
-	//   }
+	// if (!user) {
+	// 	return <Navigate replace to="/login" />
+	// }
 
-	// Otherwise → allow access to the route
 	return <Outlet />
 }
