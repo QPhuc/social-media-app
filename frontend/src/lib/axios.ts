@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const axiosClient = axios.create({
+const api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 10000,
 	headers: {
@@ -8,4 +8,9 @@ const axiosClient = axios.create({
 	},
 })
 
-export default axiosClient
+api.interceptors.response.use(
+	(response) => response.data, // 💥 trả về data trực tiếp
+	(error) => Promise.reject(error),
+)
+
+export default api
