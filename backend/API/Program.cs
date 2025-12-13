@@ -1,3 +1,5 @@
+using backend.API;
+
 namespace backend;
 
 public class Program
@@ -12,6 +14,8 @@ public class Program
         // Add Swagger/OpenAPI services
         builder.Services.AddEndpointsApiExplorer(); // Needed for minimal APIs and Swagger
         builder.Services.AddSwaggerGen();           // Registers Swagger generator
+
+        builder.Services.AddModules();
 
         var app = builder.Build();
 
