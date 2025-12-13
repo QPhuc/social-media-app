@@ -6,7 +6,8 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
   },
-  "cSpell.words": [
-    "VITE"
-  ]
+  "cSpell.words": ["VITE"],
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  }
 }
