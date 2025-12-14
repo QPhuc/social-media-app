@@ -15,7 +15,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer(); // Needed for minimal APIs and Swagger
         builder.Services.AddSwaggerGen();           // Registers Swagger generator
 
-        builder.Services.AddModules();
+        builder.Services.AddInfrastructure(builder.Configuration);
 
         var app = builder.Build();
 
