@@ -12,37 +12,29 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
     }
 
-    public DbSet<Post> Posts { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Like> Likes { get; set; }
-    public DbSet<Comment> Comments { get; set; }
-    public DbSet<Favorite> Favorites { get; set; }
-    public DbSet<Report> Reports { get; set; }
-    public DbSet<Story> Stories { get; set; }
-    public DbSet<Hashtag> Hashtags { get; set; }
-
-    public DbSet<FriendRequest> FriendRequests { get; set; }
-    public DbSet<Friendship> Friendships { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Post> Posts => Set<Post>();
+    public DbSet<Like> Likes => Set<Like>();
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Favorite> Favorites => Set<Favorite>();
+    public DbSet<Report> Reports => Set<Report>();
+    public DbSet<Story> Stories => Set<Story>();
+    public DbSet<Hashtag> Hashtags => Set<Hashtag>();
+    public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
+    public DbSet<Friendship> Friendships => Set<Friendship>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
 
-        // Domain entity configurations
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new LikeConfiguration());
-        modelBuilder.ApplyConfiguration(new CommentConfiguration());
-        modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
-        modelBuilder.ApplyConfiguration(new FriendRequestConfiguration());
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+        modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+        modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+        modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+        modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
+        modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
-        //Customize the ASP.NET identity model table names
-        modelBuilder.ApplyConfiguration(new RoleConfiguration());
-        modelBuilder.ApplyConfiguration(new UserClaimConfiguration());
-        modelBuilder.ApplyConfiguration(new UserLoginConfiguration());
-        modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
-        modelBuilder.ApplyConfiguration(new UserTokenConfiguration());
-        modelBuilder.ApplyConfiguration(new RoleClaimConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }
