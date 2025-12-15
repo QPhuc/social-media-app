@@ -4,8 +4,9 @@ namespace backend.Domain.Entities;
 
 public class FriendRequest : BaseEntity
 {
-    public int Id { get; set; }
     public string Status { get; set; } = String.Empty;
+    public DateTime DateCreated { get; set; }
+    public DateTime DateUpdated { get; set; }
     public int SenderId { get; set; }
     public int ReceiverId { get; set; }
 

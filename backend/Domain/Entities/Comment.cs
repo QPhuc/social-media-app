@@ -4,8 +4,9 @@ namespace backend.Domain.Entities;
 
 public class Comment : BaseEntity
 {
-    public int Id { get; set; }
     public string Content { get; set; } = string.Empty;
+    public DateTime DateCreated { get; set; }
+    public DateTime DateUpdated { get; set; }
     public int PostId { get; set; }
     public int UserId { get; set; }
 

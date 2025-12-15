@@ -9,10 +9,6 @@ public class User : IdentityUser<int>
     public string? ProfilePictureUrl { get; set; }
     public string? Bio { get; set; }
     public bool IsDeleted { get; set; }
-    public string CreatedBy { get; set; } = String.Empty;
-    public DateTime CreatedAt { get; set; }
-    public string? UpdatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<Story> Stories { get; set; } = new List<Story>();

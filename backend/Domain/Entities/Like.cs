@@ -4,7 +4,6 @@ namespace backend.Domain.Entities;
 
 public class Like : BaseEntity
 {
-    public int Id { get; set; }
     public int PostId { get; set; }
     public int UserId { get; set; }
 

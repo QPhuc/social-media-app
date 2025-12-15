@@ -4,12 +4,13 @@ namespace backend.Domain.Entities;
 
 public class Post : BaseEntity
 {
-    public int Id { get; set; }
     public string Content { get; set; } = String.Empty;
     public string? ImageUrl { get; set; }
     public int NrOfReports { get; set; }
     public bool IsPrivate { get; set; }
     public bool IsDeleted { get; set; }
+    public DateTime DateCreated { get; set; }
+    public DateTime DateUpdated { get; set; }
     public int UserId { get; set; }
 
     public User User { get; set; } = new User();

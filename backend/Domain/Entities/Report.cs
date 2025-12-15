@@ -4,7 +4,7 @@ namespace backend.Domain.Entities;
 
 public class Report : BaseEntity
 {
-    public int Id { get; set; }
+    public DateTime DateCreated { get; set; }
     public int PostId { get; set; }
     public int UserId { get; set; }
 
