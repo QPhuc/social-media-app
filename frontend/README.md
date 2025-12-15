@@ -71,3 +71,6 @@ export default defineConfig([
   },
 ])
 ```
+dotnet ef migrations add InitialCreate --project ./backend.csproj --startup-project ./backend.csproj --output-dir Migrations
+
+dotnet ef database update --project ./backend.csproj --startup-project ./backend.csproj
