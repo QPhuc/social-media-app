@@ -20,14 +20,19 @@ public class Program
 
         builder.Services.AddInfrastructure(builder.Configuration);
 
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>();
+
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowReactDev", policy =>
+            options.AddPolicy("CorsPolicy", policy =>
             {
-                policy.WithOrigins("http://localhost:5173") // React dev server
+                policy
+                    .WithOrigins(allowedOrigins!)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowCredentials(); // required for cookies
+                    .AllowCredentials();
             });
         });
 
@@ -71,7 +76,10 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseCors("AllowReactDev");
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseCors("AllowProduction");
+        }
 
         app.UseAuthentication();
 
