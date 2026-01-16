@@ -1,17 +1,39 @@
+import { useEffect, useRef, useState } from "react"
 import BellIcon from "@/assets/svg/bell.svg?react"
 import ChevronDownIcon from "@/assets/svg/chevron-down.svg?react"
 import LogoIcon from "@/assets/svg/logo.svg?react"
+import LogoutIcon from "@/assets/svg/logout.svg?react"
 import MenuIcon from "@/assets/svg/menu.svg?react"
 import MessageIcon from "@/assets/svg/message.svg?react"
 import MoonIcon from "@/assets/svg/moon.svg?react"
 import SearchIcon from "@/assets/svg/search.svg?react"
+import SettingsIcon from "@/assets/svg/settings.svg?react"
 import SunIcon from "@/assets/svg/sun.svg?react"
+import UserIcon from "@/assets/svg/user.svg?react"
 import { useAuth } from "@/context/AuthContext"
 import { useTheme } from "@/context/ThemeContext"
 
 const TopBar = () => {
-	const { user } = useAuth()
+	const { user, logout } = useAuth()
 	const theme = useTheme()
+	const [showUserMenu, setShowUserMenu] = useState(false)
+	const userMenuRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				userMenuRef.current &&
+				!userMenuRef.current.contains(event.target as Node)
+			) {
+				setShowUserMenu(false)
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
 
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -75,9 +97,10 @@ const TopBar = () => {
 					</button>
 
 					{/* User Menu */}
-					<div className="relative">
+					<div className="relative" ref={userMenuRef}>
 						<button
 							className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+							onClick={() => setShowUserMenu(!showUserMenu)}
 							type="button"
 						>
 							<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
@@ -85,6 +108,73 @@ const TopBar = () => {
 							</div>
 							<ChevronDownIcon className="w-4 h-4 text-gray-700 dark:text-gray-300 hidden sm:block" />
 						</button>
+
+						{/* Dropdown Menu */}
+						{showUserMenu && (
+							<div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+								{/* User Info */}
+								<div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+									<div className="flex items-center gap-3">
+										<div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+											{user?.name
+												?.charAt(0)
+												.toUpperCase() || "U"}
+										</div>
+										<div className="flex-1 min-w-0">
+											<p className="font-semibold text-gray-900 dark:text-white truncate">
+												{user?.name || "User"}
+											</p>
+											<p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+												{user?.email ||
+													"user@example.com"}
+											</p>
+										</div>
+									</div>
+								</div>
+
+								{/* Menu Items */}
+								<div className="py-2">
+									<button
+										className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+										onClick={() => {
+											setShowUserMenu(false)
+											// Navigate to profile
+										}}
+										type="button"
+									>
+										<UserIcon className="w-5 h-5" />
+										<span>Profile</span>
+									</button>
+
+									<button
+										className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+										onClick={() => {
+											setShowUserMenu(false)
+											// Navigate to settings
+										}}
+										type="button"
+									>
+										<SettingsIcon className="w-5 h-5" />
+										<span>Settings</span>
+									</button>
+								</div>
+
+								{/* Logout */}
+								<div className="border-t border-gray-200 dark:border-gray-700 pt-2">
+									<button
+										className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+										onClick={() => {
+											setShowUserMenu(false)
+											logout()
+										}}
+										type="button"
+									>
+										<LogoutIcon className="w-5 h-5" />
+										<span>Logout</span>
+									</button>
+								</div>
+							</div>
+						)}
 					</div>
 
 					{/* Mobile Menu Toggle */}

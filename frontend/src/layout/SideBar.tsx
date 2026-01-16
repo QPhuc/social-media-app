@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom"
 import BellIcon from "@/assets/svg/bell.svg?react"
 import BookmarkIcon from "@/assets/svg/bookmark.svg?react"
 import HomeIcon from "@/assets/svg/home.svg?react"
@@ -8,7 +9,6 @@ import SettingsIcon from "@/assets/svg/settings.svg?react"
 import UserIcon from "@/assets/svg/user.svg?react"
 import UsersIcon from "@/assets/svg/users.svg?react"
 import { useAuth } from "@/context/AuthContext"
-import { NavLink } from "react-router-dom"
 
 const SideBar = () => {
 	const { user, logout } = useAuth()
