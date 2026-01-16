@@ -1,8 +1,8 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import PageContainer from "@/layout/PageContainer"
 import Home from "@/pages/Home"
 import Login from "@/pages/Login"
 import NotFound from "@/pages/NotFound"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
 import ProtectedRoutes from "./ProtectedRoutes"
 
 function AppRoutes() {
