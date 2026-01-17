@@ -1,17 +1,7 @@
-import { useEffect, useRef, useState } from "react"
-import BellIcon from "@/assets/svg/bell.svg?react"
-import ChevronDownIcon from "@/assets/svg/chevron-down.svg?react"
-import LogoIcon from "@/assets/svg/logo.svg?react"
-import LogoutIcon from "@/assets/svg/logout.svg?react"
-import MenuIcon from "@/assets/svg/menu.svg?react"
-import MessageIcon from "@/assets/svg/message.svg?react"
-import MoonIcon from "@/assets/svg/moon.svg?react"
-import SearchIcon from "@/assets/svg/search.svg?react"
-import SettingsIcon from "@/assets/svg/settings.svg?react"
-import SunIcon from "@/assets/svg/sun.svg?react"
-import UserIcon from "@/assets/svg/user.svg?react"
 import { useAuth } from "@/context/AuthContext"
 import { useTheme } from "@/context/ThemeContext"
+import { Icon } from "@iconify/react"
+import { useEffect, useRef, useState } from "react"
 
 const TopBar = () => {
 	const { user, logout } = useAuth()
@@ -41,7 +31,7 @@ const TopBar = () => {
 				{/* Logo & Search */}
 				<div className="flex items-center gap-4 flex-1">
 					<div className="flex items-center gap-2">
-						<LogoIcon className="w-8 h-8 text-blue-500" />
+						<Icon icon="solar:chat-round-bold-duotone" width="32" />
 						<h1 className="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">
 							Social
 						</h1>
@@ -55,7 +45,11 @@ const TopBar = () => {
 								placeholder="Search..."
 								type="text"
 							/>
-							<SearchIcon className="absolute left-3 top-2.5 w-5 h-5 text-gray-500" />
+							<Icon
+								icon="solar:magnifer-linear"
+								width="20"
+								className="absolute left-3 top-2.5 text-gray-500"
+							/>
 						</div>
 					</div>
 				</div>
@@ -70,9 +64,17 @@ const TopBar = () => {
 						type="button"
 					>
 						{theme?.darkMode ? (
-							<SunIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+							<Icon
+								icon="solar:sun-bold-duotone"
+								width="20"
+								className="text-gray-700 dark:text-gray-300"
+							/>
 						) : (
-							<MoonIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+							<Icon
+								icon="solar:moon-bold-duotone"
+								width="20"
+								className="text-gray-700 dark:text-gray-300"
+							/>
 						)}
 					</button>
 
@@ -82,7 +84,11 @@ const TopBar = () => {
 						className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
 						type="button"
 					>
-						<BellIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+						<Icon
+							icon="solar:bell-bold-duotone"
+							width="20"
+							className="text-gray-700 dark:text-gray-300"
+						/>
 						<span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
 					</button>
 
@@ -92,7 +98,11 @@ const TopBar = () => {
 						className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
 						type="button"
 					>
-						<MessageIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+						<Icon
+							icon="solar:chat-round-dots-bold-duotone"
+							width="20"
+							className="text-gray-700 dark:text-gray-300"
+						/>
 						<span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full" />
 					</button>
 
@@ -106,7 +116,11 @@ const TopBar = () => {
 							<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
 								{user?.name?.charAt(0).toUpperCase() || "U"}
 							</div>
-							<ChevronDownIcon className="w-4 h-4 text-gray-700 dark:text-gray-300 hidden sm:block" />
+							<Icon
+								icon="solar:alt-arrow-down-linear"
+								width="16"
+								className="text-gray-700 dark:text-gray-300 hidden sm:block"
+							/>
 						</button>
 
 						{/* Dropdown Menu */}
@@ -142,7 +156,10 @@ const TopBar = () => {
 										}}
 										type="button"
 									>
-										<UserIcon className="w-5 h-5" />
+										<Icon
+											icon="solar:user-bold-duotone"
+											width="20"
+										/>
 										<span>Profile</span>
 									</button>
 
@@ -154,7 +171,10 @@ const TopBar = () => {
 										}}
 										type="button"
 									>
-										<SettingsIcon className="w-5 h-5" />
+										<Icon
+											icon="solar:settings-bold-duotone"
+											width="20"
+										/>
 										<span>Settings</span>
 									</button>
 								</div>
@@ -169,7 +189,10 @@ const TopBar = () => {
 										}}
 										type="button"
 									>
-										<LogoutIcon className="w-5 h-5" />
+										<Icon
+											icon="solar:logout-2-bold-duotone"
+											width="20"
+										/>
 										<span>Logout</span>
 									</button>
 								</div>
@@ -183,7 +206,11 @@ const TopBar = () => {
 						className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
 						type="button"
 					>
-						<MenuIcon className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+						<Icon
+							icon="solar:hamburger-menu-linear"
+							width="24"
+							className="text-gray-700 dark:text-gray-300"
+						/>
 					</button>
 				</div>
 			</div>

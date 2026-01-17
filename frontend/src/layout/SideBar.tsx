@@ -1,53 +1,27 @@
-import { NavLink } from "react-router-dom"
-import BellIcon from "@/assets/svg/bell.svg?react"
-import BookmarkIcon from "@/assets/svg/bookmark.svg?react"
-import HomeIcon from "@/assets/svg/home.svg?react"
-import LogoutIcon from "@/assets/svg/logout.svg?react"
-import MessageIcon from "@/assets/svg/message.svg?react"
-import SearchIcon from "@/assets/svg/search.svg?react"
-import SettingsIcon from "@/assets/svg/settings.svg?react"
-import UserIcon from "@/assets/svg/user.svg?react"
-import UsersIcon from "@/assets/svg/users.svg?react"
 import { useAuth } from "@/context/AuthContext"
+import { Icon } from "@iconify/react"
+import { NavLink } from "react-router-dom"
 
 const SideBar = () => {
 	const { user, logout } = useAuth()
 
 	const navItems = [
 		{
-			icon: <HomeIcon className="w-6 h-6" />,
-			label: "Home",
+			icon: "flat-color-icons:home",
+			label: "Feed",
 			path: "/",
 		},
 		{
-			icon: <SearchIcon className="w-6 h-6" />,
-			label: "Explore",
-			path: "/explore",
+			icon: "solar:flag-bold",
+			label: "Favorites",
+            path: "/favorites",
+            color: "#d21010",
 		},
 		{
-			icon: <BellIcon className="w-6 h-6" />,
-			label: "Notifications",
-			path: "/notifications",
-		},
-		{
-			icon: <MessageIcon className="w-6 h-6" />,
-			label: "Messages",
-			path: "/messages",
-		},
-		{
-			icon: <BookmarkIcon className="w-6 h-6" />,
-			label: "Saved",
-			path: "/saved",
-		},
-		{
-			icon: <UsersIcon className="w-6 h-6" />,
-			label: "Groups",
-			path: "/groups",
-		},
-		{
-			icon: <UserIcon className="w-6 h-6" />,
-			label: "Profile",
-			path: "/profile",
+			icon: "solar:users-group-rounded-bold-duotone",
+			label: "Friends",
+            path: "/friends",
+            color: "#f0cb28",
 		},
 	]
 
@@ -89,7 +63,7 @@ const SideBar = () => {
 						key={item.path}
 						to={item.path}
 					>
-						{item.icon}
+						<Icon icon={item.icon} width="24" color={item.color || ""} />
 						<span className="font-medium">{item.label}</span>
 					</NavLink>
 				))}
@@ -108,19 +82,9 @@ const SideBar = () => {
 					}
 					to="/settings"
 				>
-					<SettingsIcon className="w-6 h-6" />
+					<Icon icon="solar:settings-bold-duotone" width="24" />
 					<span className="font-medium">Settings</span>
 				</NavLink>
-
-				{/* Logout */}
-				<button
-					className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-					onClick={logout}
-					type="button"
-				>
-					<LogoutIcon className="w-6 h-6" />
-					<span className="font-medium">Logout</span>
-				</button>
 
 				{/* Footer */}
 				<div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
