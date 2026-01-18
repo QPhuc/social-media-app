@@ -1,6 +1,6 @@
-import { useAuth } from "@/context/AuthContext"
 import { Icon } from "@iconify/react"
 import { NavLink } from "react-router-dom"
+import { useAuth } from "@/context/AuthContext"
 
 const SideBar = () => {
 	const { user, logout } = useAuth()
@@ -14,14 +14,14 @@ const SideBar = () => {
 		{
 			icon: "solar:flag-bold",
 			label: "Favorites",
-            path: "/favorites",
-            color: "#d21010",
+			path: "/favorites",
+			color: "#d21010",
 		},
 		{
 			icon: "solar:users-group-rounded-bold-duotone",
 			label: "Friends",
-            path: "/friends",
-            color: "#f0cb28",
+			path: "/friends",
+			color: "#f0cb28",
 		},
 	]
 
@@ -63,7 +63,11 @@ const SideBar = () => {
 						key={item.path}
 						to={item.path}
 					>
-						<Icon icon={item.icon} width="24" color={item.color || ""} />
+						<Icon
+							color={item.color || ""}
+							icon={item.icon}
+							width="24"
+						/>
 						<span className="font-medium">{item.label}</span>
 					</NavLink>
 				))}

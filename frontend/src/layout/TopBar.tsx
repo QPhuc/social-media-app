@@ -1,7 +1,7 @@
-import { useAuth } from "@/context/AuthContext"
-import { useTheme } from "@/context/ThemeContext"
 import { Icon } from "@iconify/react"
 import { useEffect, useRef, useState } from "react"
+import { useAuth } from "@/context/AuthContext"
+import { useTheme } from "@/context/ThemeContext"
 
 const TopBar = () => {
 	const { user, logout } = useAuth()
@@ -46,9 +46,9 @@ const TopBar = () => {
 								type="text"
 							/>
 							<Icon
+								className="absolute left-3 top-2.5 text-gray-500"
 								icon="solar:magnifer-linear"
 								width="20"
-								className="absolute left-3 top-2.5 text-gray-500"
 							/>
 						</div>
 					</div>
@@ -65,15 +65,15 @@ const TopBar = () => {
 					>
 						{theme?.darkMode ? (
 							<Icon
+								className="text-gray-700 dark:text-gray-300"
 								icon="solar:sun-bold-duotone"
 								width="20"
-								className="text-gray-700 dark:text-gray-300"
 							/>
 						) : (
 							<Icon
+								className="text-gray-700 dark:text-gray-300"
 								icon="solar:moon-bold-duotone"
 								width="20"
-								className="text-gray-700 dark:text-gray-300"
 							/>
 						)}
 					</button>
@@ -85,9 +85,9 @@ const TopBar = () => {
 						type="button"
 					>
 						<Icon
+							className="text-gray-700 dark:text-gray-300"
 							icon="solar:bell-bold-duotone"
 							width="20"
-							className="text-gray-700 dark:text-gray-300"
 						/>
 						<span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
 					</button>
@@ -99,9 +99,9 @@ const TopBar = () => {
 						type="button"
 					>
 						<Icon
+							className="text-gray-700 dark:text-gray-300"
 							icon="solar:chat-round-dots-bold-duotone"
 							width="20"
-							className="text-gray-700 dark:text-gray-300"
 						/>
 						<span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full" />
 					</button>
@@ -117,9 +117,9 @@ const TopBar = () => {
 								{user?.name?.charAt(0).toUpperCase() || "U"}
 							</div>
 							<Icon
+								className="text-gray-700 dark:text-gray-300 hidden sm:block"
 								icon="solar:alt-arrow-down-linear"
 								width="16"
-								className="text-gray-700 dark:text-gray-300 hidden sm:block"
 							/>
 						</button>
 
@@ -207,9 +207,9 @@ const TopBar = () => {
 						type="button"
 					>
 						<Icon
+							className="text-gray-700 dark:text-gray-300"
 							icon="solar:hamburger-menu-linear"
 							width="24"
-							className="text-gray-700 dark:text-gray-300"
 						/>
 					</button>
 				</div>
