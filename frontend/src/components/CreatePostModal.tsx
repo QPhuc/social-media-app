@@ -73,7 +73,10 @@ const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
 								You
 							</p>
 							<div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-								<Icon icon="solar:users-group-rounded-bold" width="16" />
+								<Icon
+									icon="solar:users-group-rounded-bold"
+									width="16"
+								/>
 								<span>Public</span>
 							</div>
 						</div>
@@ -101,7 +104,10 @@ const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
 								onClick={() => setSelectedImage(null)}
 								type="button"
 							>
-								<Icon icon="solar:trash-bin-trash-bold" width="20" />
+								<Icon
+									icon="solar:trash-bin-trash-bold"
+									width="20"
+								/>
 							</button>
 						</div>
 					)}
@@ -122,11 +128,16 @@ const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
 								/>
 								<button
 									className="p-2 text-green-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-									onClick={() => fileInputRef.current?.click()}
+									onClick={() =>
+										fileInputRef.current?.click()
+									}
 									title="Add photo/video"
 									type="button"
 								>
-									<Icon icon="solar:gallery-bold-duotone" width="24" />
+									<Icon
+										icon="solar:gallery-bold-duotone"
+										width="24"
+									/>
 								</button>
 								<button
 									className="p-2 text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -153,7 +164,10 @@ const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
 									title="Add location"
 									type="button"
 								>
-									<Icon icon="solar:map-point-bold-duotone" width="24" />
+									<Icon
+										icon="solar:map-point-bold-duotone"
+										width="24"
+									/>
 								</button>
 							</div>
 						</div>

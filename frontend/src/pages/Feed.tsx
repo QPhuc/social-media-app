@@ -1,9 +1,9 @@
-import CreatePostModal from "@/components/CreatePostModal"
-import PostCard from "@/components/PostCard"
-import type { Post } from "@/lib/types/post"
 import { Icon } from "@iconify/react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import CreatePostModal from "@/components/CreatePostModal"
+import PostCard from "@/components/PostCard"
+import type { Post } from "@/lib/types/post"
 
 // Mock data - replace with actual API call
 const mockPosts: Post[] = [
