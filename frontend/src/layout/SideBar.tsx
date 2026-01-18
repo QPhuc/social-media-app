@@ -1,6 +1,6 @@
+import { useAuth } from "@/context/AuthContext"
 import { Icon } from "@iconify/react"
 import { NavLink } from "react-router-dom"
-import { useAuth } from "@/context/AuthContext"
 
 const SideBar = () => {
 	const { user } = useAuth()
