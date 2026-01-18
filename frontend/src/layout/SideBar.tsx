@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
 
 const SideBar = () => {
-	const { user, logout } = useAuth()
+	const { user } = useAuth()
 
 	const navItems = [
 		{

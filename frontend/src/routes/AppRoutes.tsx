@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import PageContainer from "@/layout/PageContainer"
+import CreateStory from "@/pages/CreateStory"
 import Home from "@/pages/Home"
 import Login from "@/pages/Login"
 import NotFound from "@/pages/NotFound"
@@ -23,6 +24,8 @@ function AppRoutes() {
 						}
 						path="/"
 					/>
+					{/* Story Creation - Full Screen (No Layout) */}
+					<Route element={<CreateStory />} path="/stories/create" />
 				</Route>
 
 				{/* Catch all - redirect to 404 */}

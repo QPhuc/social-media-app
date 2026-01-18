@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import PostCard from "@/components/PostCard"
 import type { Post } from "@/lib/types/post"
 
@@ -130,6 +131,7 @@ const mockPosts: Post[] = [
 ]
 
 const Feed = () => {
+	const navigate = useNavigate()
 	const [posts] = useState<Post[]>(mockPosts)
 	const [showCreatePost, setShowCreatePost] = useState(false)
 
@@ -208,6 +210,7 @@ const Feed = () => {
 					{/* Add Story */}
 					<button
 						className="flex-shrink-0 text-center group"
+						onClick={() => navigate("/stories/create")}
 						type="button"
 					>
 						<div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
