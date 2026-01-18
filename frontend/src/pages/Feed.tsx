@@ -1,8 +1,9 @@
+import CreatePostModal from "@/components/CreatePostModal"
+import PostCard from "@/components/PostCard"
+import type { Post } from "@/lib/types/post"
 import { Icon } from "@iconify/react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import PostCard from "@/components/PostCard"
-import type { Post } from "@/lib/types/post"
 
 // Mock data - replace with actual API call
 const mockPosts: Post[] = [
@@ -133,10 +134,16 @@ const mockPosts: Post[] = [
 const Feed = () => {
 	const navigate = useNavigate()
 	const [posts] = useState<Post[]>(mockPosts)
-	const [showCreatePost, setShowCreatePost] = useState(false)
+	const [showCreatePostModal, setShowCreatePostModal] = useState(false)
 
 	return (
 		<div className="max-w-2xl mx-auto py-6 px-4">
+			{/* Create Post Modal */}
+			<CreatePostModal
+				isOpen={showCreatePostModal}
+				onClose={() => setShowCreatePostModal(false)}
+			/>
+
 			{/* Create Post Button/Card */}
 			<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
 				<div className="flex items-center gap-3">
@@ -147,61 +154,12 @@ const Feed = () => {
 					/>
 					<button
 						className="flex-1 text-left bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-3 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-						onClick={() => setShowCreatePost(!showCreatePost)}
+						onClick={() => setShowCreatePostModal(true)}
 						type="button"
 					>
 						What's on your mind?
 					</button>
 				</div>
-				{showCreatePost && (
-					<div className="mt-4 space-y-3">
-						<textarea
-							className="w-full bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-							placeholder="Share your thoughts..."
-							rows={4}
-						/>
-						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-2">
-								<button
-									className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-									title="Add photo"
-									type="button"
-								>
-									<Icon
-										icon="solar:gallery-bold-duotone"
-										width="24"
-									/>
-								</button>
-								<button
-									className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-									title="Add emoji"
-									type="button"
-								>
-									<Icon
-										icon="solar:emoji-funny-square-bold-duotone"
-										width="24"
-									/>
-								</button>
-								<button
-									className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-									title="Add location"
-									type="button"
-								>
-									<Icon
-										icon="solar:map-point-bold-duotone"
-										width="24"
-									/>
-								</button>
-							</div>
-							<button
-								className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
-								type="button"
-							>
-								Post
-							</button>
-						</div>
-					</div>
-				)}
 			</div>
 
 			{/* Stories Section (Optional) */}
