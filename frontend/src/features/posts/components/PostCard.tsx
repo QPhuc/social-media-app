@@ -1,6 +1,6 @@
+import type { Post } from "@/lib/types/post"
 import { Icon } from "@iconify/react"
 import { useState } from "react"
-import type { Post } from "@/lib/types/post"
 
 interface PostCardProps {
 	post: Post
@@ -11,6 +11,7 @@ const PostCard = ({ post }: PostCardProps) => {
 	const [isSaved, setIsSaved] = useState(false)
 	const [showComments, setShowComments] = useState(false)
 	const [likesCount, setLikesCount] = useState(post.likes?.length || 0)
+	const [showMenu, setShowMenu] = useState(false)
 
 	const handleLike = () => {
 		setIsLiked(!isLiked)
@@ -58,12 +59,95 @@ const PostCard = ({ post }: PostCardProps) => {
 						</p>
 					</div>
 				</div>
-				<button
-					className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-					type="button"
-				>
-					<Icon icon="solar:menu-dots-bold" width="24" />
-				</button>
+				<div className="relative">
+					<button
+						className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+						onClick={() => setShowMenu(!showMenu)}
+						type="button"
+					>
+						<Icon icon="solar:menu-dots-bold" width="24" />
+					</button>
+
+					{/* Dropdown Menu */}
+					{showMenu && (
+						<>
+							<div
+								className="fixed inset-0 z-10"
+								onClick={() => setShowMenu(false)}
+								onKeyDown={(e) => {
+									if (e.key === "Escape") setShowMenu(false)
+								}}
+								role="button"
+								tabIndex={-1}
+								aria-label="Close menu"
+							/>
+							<div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20">
+								<div className="py-1">
+									<button
+										className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+										onClick={() => {
+											setShowMenu(false)
+											// TODO: Implement save post
+										}}
+										type="button"
+									>
+										<Icon icon="solar:bookmark-bold-duotone" width="20" />
+										Save post
+									</button>
+									<button
+										className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+										onClick={() => {
+											setShowMenu(false)
+											// TODO: Implement hide post
+										}}
+										type="button"
+									>
+										<Icon icon="solar:eye-closed-bold-duotone" width="20" />
+										Hide post
+									</button>
+									<button
+										className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+										onClick={() => {
+											setShowMenu(false)
+											// TODO: Implement edit post
+										}}
+										type="button"
+									>
+										<Icon icon="solar:pen-bold-duotone" width="20" />
+										Edit post
+									</button>
+									<div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+									<button
+										className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+										onClick={() => {
+											setShowMenu(false)
+											// TODO: Implement delete post
+											if (confirm("Are you sure you want to delete this post?")) {
+												console.log("Delete post:", post.id)
+											}
+										}}
+										type="button"
+									>
+										<Icon icon="solar:trash-bin-trash-bold-duotone" width="20" />
+										Delete post
+									</button>
+									<button
+										className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+										onClick={() => {
+											setShowMenu(false)
+											// TODO: Implement report post
+											console.log("Report post:", post.id)
+										}}
+										type="button"
+									>
+										<Icon icon="solar:danger-triangle-bold-duotone" width="20" />
+										Report post
+									</button>
+								</div>
+							</div>
+						</>
+					)}
+				</div>
 			</div>
 
 			{/* Post Content */}
