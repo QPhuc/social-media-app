@@ -1,5 +1,6 @@
 import { SuggestedFriends } from "@/features/friends"
 import { CreatePostModal, PostCard } from "@/features/posts"
+import { TrendsForYou } from "@/features/trends"
 import type { Post } from "@/lib/types/post"
 import { Icon } from "@iconify/react"
 import { useState } from "react"
@@ -244,6 +245,7 @@ const Feed = () => {
 			<aside className="hidden lg:block w-80 flex-shrink-0">
 				<div className="sticky top-6 space-y-4">
 					<SuggestedFriends />
+					<TrendsForYou />
 				</div>
 			</aside>
 		</div>
