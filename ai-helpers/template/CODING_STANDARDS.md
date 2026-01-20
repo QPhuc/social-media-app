@@ -1067,24 +1067,126 @@ public static class ServiceCollectionExtensions
 
 ```
 src/
-├── features/
-│   └── [feature]/
-│       ├── components/         # Feature-specific components
-│       ├── hooks/             # Feature-specific hooks
-│       ├── services/          # API calls
-│       ├── types/             # TypeScript types
-│       ├── utils/             # Helper functions
-│       └── index.ts           # Public API
-├── components/
-│   ├── ui/                    # Reusable UI components
-│   └── form/                  # Form components
+├── features/                   # Feature modules (domain-specific)
+│   ├── posts/
+│   │   ├── components/        # PostCard, CreatePostModal, etc.
+│   │   ├── hooks/             # usePosts, useCreatePost, etc.
+│   │   ├── services/          # postsApi.ts
+│   │   ├── types/             # Post, CreatePostDto, etc.
+│   │   └── index.ts           # export { PostCard, usePosts }
+│   ├── friends/
+│   │   ├── components/        # SuggestedFriends, FriendsList, etc.
+│   │   └── index.ts
+│   ├── stories/
+│   │   ├── components/        # AddStoryModal, StoryViewer, etc.
+│   │   └── index.ts
+│   └── trends/
+│       ├── components/        # TrendsForYou, TrendCard, etc.
+│       └── index.ts
+├── components/                 # Shared/reusable components only
+│   ├── ui/                    # Button, Card, Modal, Spinner, etc.
+│   └── form/                  # Input, Select, Checkbox, etc.
 ├── lib/
-│   ├── api.ts                 # API client
-│   └── types/                 # Global types
-├── hooks/                     # Global hooks
-├── context/                   # React Context
-├── pages/                     # Route pages
-└── routes/                    # Route config
+│   ├── api.ts                 # Axios instance, interceptors
+│   └── types/                 # Global types (ApiResponse, etc.)
+├── hooks/                     # Global/shared hooks
+├── context/                   # React Context (Auth, Theme)
+├── pages/                     # Route pages (Feed, Profile, etc.)
+└── routes/                    # Route configuration
+```
+
+### 📁 Feature Folder Organization Rules
+
+#### ✅ When to create a feature folder:
+
+1. **Domain-specific functionality**: posts, users, friends, stories, trends
+2. **Multiple related components**: More than 1 component for the same domain
+3. **Has business logic**: API calls, data transformations, state management
+4. **Reused across multiple pages**: But only within that domain
+
+#### ✅ What goes in `features/[feature-name]/`:
+
+```
+features/posts/
+├── components/           # Components specific to posts feature
+│   ├── PostCard.tsx     # Display a single post
+│   ├── CreatePostModal.tsx  # Modal to create new post
+│   ├── PostList.tsx     # List of posts
+│   └── PostActions.tsx  # Like, comment, share buttons
+├── hooks/               # Custom hooks for posts
+│   └── usePosts.ts      # usePosts, useCreatePost, useLikePost
+├── services/            # API calls
+│   └── postsApi.ts      # getPosts, createPost, likePost
+├── types/               # TypeScript types
+│   └── index.ts         # Post, CreatePostDto, UpdatePostDto
+└── index.ts             # Public exports
+```
+
+#### ✅ What goes in `components/`:
+
+**Only shared/reusable UI components that are domain-agnostic:**
+
+```
+components/
+├── ui/
+│   ├── Button.tsx       # Generic button component
+│   ├── Card.tsx         # Generic card wrapper
+│   ├── Modal.tsx        # Generic modal wrapper
+│   ├── Spinner.tsx      # Loading spinner
+│   └── Avatar.tsx       # User avatar display
+└── form/
+    ├── Input.tsx        # Generic text input
+    ├── Select.tsx       # Generic dropdown
+    ├── Checkbox.tsx     # Generic checkbox
+    └── TextArea.tsx     # Generic textarea
+```
+
+#### ❌ Common Mistakes:
+
+```
+❌ components/PostCard.tsx          → ✅ features/posts/components/PostCard.tsx
+❌ components/CreatePostModal.tsx   → ✅ features/posts/components/CreatePostModal.tsx
+❌ components/SuggestedFriends.tsx  → ✅ features/friends/components/SuggestedFriends.tsx
+❌ components/AddStoryModal.tsx     → ✅ features/stories/components/AddStoryModal.tsx
+❌ components/TrendsForYou.tsx      → ✅ features/trends/components/TrendsForYou.tsx
+```
+
+### 📋 Feature Folder Template
+
+#### 1. Create Feature Structure
+
+```bash
+# Create feature folders
+mkdir -p src/features/[feature-name]/components
+mkdir -p src/features/[feature-name]/hooks
+mkdir -p src/features/[feature-name]/services
+mkdir -p src/features/[feature-name]/types
+```
+
+#### 2. Export from `index.ts`
+
+```tsx
+// features/posts/index.ts
+export { PostCard } from "./components/PostCard"
+export { CreatePostModal } from "./components/CreatePostModal"
+export { PostList } from "./components/PostList"
+
+export { usePosts, useCreatePost, useLikePost } from "./hooks/usePosts"
+
+export * from "./types"
+```
+
+#### 3. Import in Pages
+
+```tsx
+// pages/Feed.tsx
+// ✅ Clean imports from feature index
+import { PostCard, CreatePostModal, usePosts } from "@/features/posts"
+import { SuggestedFriends } from "@/features/friends"
+import { TrendsForYou } from "@/features/trends"
+
+// ❌ Don't import directly from components folder
+import PostCard from "@/features/posts/components/PostCard"  // Bad!
 ```
 
 ---
@@ -1641,7 +1743,29 @@ export const useNotification = () => {
    - Define types for props, state, API responses
    - Use utility types: `Partial`, `Pick`, `Omit`
 
-7. **Dependency Injection**
+7. **Icons**
+   - Use `@iconify/react` for all icons
+   - Consistent icon set: Solar icons recommended
+   - Keep icon imports simple
+   ```tsx
+   // ✅ Good: Use Iconify
+   import { Icon } from "@iconify/react"
+   
+   <Icon icon="solar:heart-bold" width="24" />
+   <Icon icon="solar:user-circle-bold-duotone" width="32" />
+   
+   // ❌ Bad: Multiple icon libraries
+   import { FaHeart } from 'react-icons/fa'
+   import HeartIcon from '@heroicons/react/heart'
+   ```
+   
+   **Benefits:**
+   - 150,000+ icons from 100+ icon sets
+   - No bundle bloat (only used icons loaded)
+   - Consistent styling across app
+   - Easy to switch icon sets
+
+8. **Dependency Injection**
    ```tsx
    // ✅ Good: Inject dependencies
    const ApiContext = createContext<ApiClient | null>(null)
@@ -1664,15 +1788,49 @@ export const useNotification = () => {
 ## Code Review Checklist
 
 ### Backend - SOLID Compliance
-- [ ] Follows Clean Architecture principles
-- [ ] CQRS implemented correctly
-- [ ] Proper error handling
-- [ ] Validation in place
-- [ ] Async/await used correctly
-- [ ] No business logic in controllers
-- [ ] DTOs used for data transfer
-- [ ] Repository pattern implemented
-- [ ] Unit tests written
+- [ ] ✅ **BaseEntity** includes `CreatedAt`, `UpdatedAt`, `IsDeleted`
+- [ ] ✅ **Repository Pattern** implemented (IGenericRepository, specific repositories)
+- [ ] ✅ **Unit of Work** includes all repository properties
+- [ ] ✅ **CQRS Pattern** with MediatR (Commands, Queries, Handlers)
+- [ ] ✅ **FluentValidation** for all Commands
+- [ ] ✅ **DTOs** for data transfer (no entities exposed)
+- [ ] ✅ **AutoMapper** for entity-DTO mapping
+- [ ] ✅ **Global Exception Handler** middleware
+- [ ] ✅ Controllers are thin (only route to MediatR)
+- [ ] ✅ Async/await used correctly with CancellationToken
+- [ ] ✅ No business logic in Controllers
+- [ ] ✅ All dependencies injected via constructor (DIP)
+- [ ] [ ] Unit tests written
+
+### Backend - Clean Architecture Checklist
+#### Domain Layer
+- [ ] ✅ Entities inherit from `BaseEntity`
+- [ ] ✅ No dependencies on other layers
+- [ ] ✅ Domain exceptions defined
+- [ ] ✅ Value objects for complex types (if needed)
+
+#### Application Layer
+- [ ] ✅ CQRS Commands in `[Feature]/Commands/`
+- [ ] ✅ CQRS Queries in `[Feature]/Queries/`
+- [ ] ✅ Validators in same folder as Commands
+- [ ] ✅ DTOs in `[Feature]/DTOs/`
+- [ ] ✅ Interfaces in `Common/Interfaces/`
+- [ ] ✅ No dependencies on Infrastructure
+
+#### Infrastructure Layer
+- [ ] ✅ DbContext configuration
+- [ ] ✅ Repository implementations
+- [ ] ✅ UnitOfWork implementation
+- [ ] ✅ Entity configurations (Fluent API)
+- [ ] ✅ Migrations up to date
+
+#### API Layer
+- [ ] ✅ Controllers use MediatR
+- [ ] ✅ Proper HTTP status codes
+- [ ] ✅ API documentation (Swagger)
+- [ ] ✅ Global exception middleware registered
+- [ ] ✅ CORS configured
+- [ ] ✅ Authentication/Authorization
 
 ### Frontend
 - [ ] Component is properly typed
@@ -1684,6 +1842,9 @@ export const useNotification = () => {
 - [ ] Performance optimized
 - [ ] API calls in services, not components
 - [ ] Custom hooks for reusable logic
+- [ ] Icons from @iconify/react
+- [ ] Features organized in features/ folder
+- [ ] Shared components in components/ folder
 
 ---
 
@@ -1692,17 +1853,79 @@ export const useNotification = () => {
 ### Common Commands
 
 ```bash
-# Backend
+# Backend - Initial Setup
 dotnet new webapi -n API
 dotnet add package MediatR
+dotnet add package FluentValidation.DependencyInjectionExtensions
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate
 dotnet ef database update
+
+# Backend - Add Feature
+# 1. Create folder structure
+mkdir -p Application/Posts/{Commands/CreatePost,Queries/GetPosts,DTOs}
+# 2. Create Command, Handler, Validator
+# 3. Create Query, Handler
+# 4. Create DTOs
+# 5. Register in DI if needed
 
 # Frontend
 npm create vite@latest
 npm install @tanstack/react-query
 npm install react-hook-form zod @hookform/resolvers
+npm install @iconify/react        # Icons library
 npm run dev
+```
+
+### Recommended Dependencies
+
+#### Backend Core
+```xml
+<PackageReferences>
+  <!-- Core -->
+  <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+  <PackageReference Include="Swashbuckle.AspNetCore" />
+  
+  <!-- Database -->
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  
+  <!-- CQRS & Validation -->
+  <PackageReference Include="MediatR" Version="14.x" />
+  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.x" />
+  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.x" />
+  
+  <!-- Authentication -->
+  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+</PackageReferences>
+```
+
+#### Frontend Core
+```json
+{
+  "dependencies": {
+    "react": "^19.x",
+    "react-dom": "^19.x",
+    "react-router-dom": "^7.x",
+    "@iconify/react": "^6.x",           // Icons
+    "axios": "^1.x",                     // HTTP client
+    "@tanstack/react-query": "^5.x",     // Server state (optional)
+    "react-hook-form": "^7.x",           // Forms (optional)
+    "zod": "^3.x",                       // Validation (optional)
+    "@hookform/resolvers": "^3.x"        // RHF + Zod (optional)
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.x",           // Linting & formatting
+    "vite": "^7.x",
+    "typescript": "^5.x",
+    "tailwindcss": "^4.x",              // CSS framework (optional)
+    "@tailwindcss/vite": "^4.x",        // TailwindCSS Vite plugin
+    "husky": "^9.x",                    // Git hooks
+    "lint-staged": "^16.x"              // Pre-commit linting
+  }
+}
 ```
 
 ### Useful Snippets

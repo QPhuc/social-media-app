@@ -1,5 +1,6 @@
 using backend.Application.Common.Interfaces;
 using backend.Infrastructure.Persistence.DbContext;
+using backend.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Infrastructure.Persistence;
@@ -8,11 +9,17 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
     private IDbContextTransaction? _transaction;
+    
+    // Repositories
+    private IPostRepository? _postRepository;
 
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
     }
+
+    public IPostRepository Posts => 
+        _postRepository ??= new PostRepository(_context);
 
     public async Task BeginTransactionAsync()
         => _transaction = await _context.Database.BeginTransactionAsync();
