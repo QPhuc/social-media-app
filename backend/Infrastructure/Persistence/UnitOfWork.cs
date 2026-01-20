@@ -36,6 +36,9 @@ public class UnitOfWork : IUnitOfWork
     public async Task<int> CompleteAsync()
         => await _context.SaveChangesAsync();
 
+    public async Task<int> SaveChangesAsync()
+        => await _context.SaveChangesAsync();
+
     public void Dispose()
     {
         _transaction?.Dispose();

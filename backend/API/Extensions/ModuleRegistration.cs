@@ -1,8 +1,10 @@
 using System;
+using System.Reflection;
 using backend.Application.Common.Interfaces;
 using backend.Domain.Entities;
 using backend.Infrastructure.Persistence;
 using backend.Infrastructure.Persistence.DbContext;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +29,20 @@ public static class ModuleRegistration
         
         // Unit Of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        // MediatR
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(Application.Posts.Commands.CreatePost.CreatePostCommand).Assembly);
+            // Add ValidationBehavior to pipeline
+            cfg.AddOpenBehavior(typeof(Application.Common.Behaviors.ValidationBehavior<,>));
+        });
+        
+        // FluentValidation
+        services.AddValidatorsFromAssembly(typeof(Application.Posts.Commands.CreatePost.CreatePostCommand).Assembly);
+        
+        // AutoMapper
+        services.AddAutoMapper(typeof(Application.Posts.Mappings.PostMappingProfile).Assembly);
         
         // Services
 

@@ -1,5 +1,6 @@
 using System.Text;
 using backend.API;
+using backend.API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -63,6 +64,9 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
+        // Global Exception Handler (must be first)
+        app.UseGlobalExceptionHandler();
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();                       // Enable middleware to serve generated Swagger as JSON

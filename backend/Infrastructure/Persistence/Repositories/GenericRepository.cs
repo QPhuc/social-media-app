@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using backend.Application.Common.Interfaces;
 using backend.Domain.Common;
 using backend.Infrastructure.Persistence.DbContext;
@@ -27,16 +28,24 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await _dbSet.ToListAsync();
     }
 
-    public async Task<List<T>> GetPagedAsync(int pageNumber, int pageSize)
+    public async Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? filter = null)
     {
-        return await _dbSet
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+            query = query.Where(filter);
+
+        return await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
     }
 
-    public async Task<int> CountAsync()
+    public async Task<int> CountAsync(Expression<Func<T, bool>>? filter = null)
     {
+        if (filter != null)
+            return await _dbSet.CountAsync(filter);
+
         return await _dbSet.CountAsync();
     }
 

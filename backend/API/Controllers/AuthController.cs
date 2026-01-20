@@ -1,12 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using backend.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
+using backend.Application.Auth.Commands.Login;
+using backend.Application.Auth.Commands.RefreshToken;
+using backend.Application.Auth.Commands.Register;
+using backend.Application.Auth.DTOs;
+using backend.Application.Common.DTOs;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace backend.API.Controllers;
 
@@ -14,25 +12,92 @@ namespace backend.API.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<User> _userManager;
-    private readonly IConfiguration _config;
+    private readonly IMediator _mediator;
 
-    public AuthController(UserManager<User> userManager, IConfiguration config)
+    public AuthController(IMediator mediator)
     {
-        _userManager = userManager;
-        _config = config;
+        _mediator = mediator;
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest request)
+    /// <summary>
+    /// Register a new user
+    /// </summary>
+    [HttpPost("register")]
+    public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Register([FromBody] RegisterDto dto)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-            return Unauthorized();
+        var command = new RegisterCommand
+        {
+            Email = dto.Email,
+            Password = dto.Password,
+            FullName = dto.FullName,
+            UserName = dto.UserName
+        };
 
-        var accessToken = GenerateAccessToken(user);
-        var refreshToken = GenerateRefreshToken();
+        var result = await _mediator.Send(command);
 
+        // Set refresh token in HTTP-only cookie
+        SetRefreshTokenCookie(result.RefreshToken);
+
+        return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Registration successful."));
+    }
+
+    /// <summary>
+    /// Login with email and password
+    /// </summary>
+    [HttpPost("login")]
+    public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Login([FromBody] LoginDto dto)
+    {
+        var command = new LoginCommand
+        {
+            Email = dto.Email,
+            Password = dto.Password
+        };
+
+        var result = await _mediator.Send(command);
+
+        // Set refresh token in HTTP-only cookie
+        SetRefreshTokenCookie(result.RefreshToken);
+
+        return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Login successful."));
+    }
+
+    /// <summary>
+    /// Refresh access token using refresh token from cookie
+    /// </summary>
+    [HttpPost("refresh")]
+    public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Refresh()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized(ApiResponse<AuthResponseDto>.FailureResponse("Refresh token not found."));
+
+        var command = new RefreshTokenCommand
+        {
+            RefreshToken = refreshToken
+        };
+
+        var result = await _mediator.Send(command);
+
+        // Set new refresh token in HTTP-only cookie
+        SetRefreshTokenCookie(result.RefreshToken);
+
+        return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Token refreshed successfully."));
+    }
+
+    /// <summary>
+    /// Logout - clear refresh token cookie
+    /// </summary>
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("refreshToken");
+        return Ok(ApiResponse<object>.SuccessResponse(new { }, "Logout successful."));
+    }
+
+    #region Private Methods
+    private void SetRefreshTokenCookie(string refreshToken)
+    {
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
@@ -41,51 +106,6 @@ public class AuthController : ControllerBase
             Expires = DateTime.UtcNow.AddDays(7)
         };
         Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
-
-        return Ok(new { AccessToken = accessToken });
-    }
-
-    [HttpPost("refresh")]
-    public IActionResult Refresh()
-    {
-        var refreshToken = Request.Cookies["refreshToken"];
-        if (refreshToken == null) return Unauthorized();
-
-        // Validate refresh token from DB or claim (skipped for brevity)
-        var userId = 1; // Example, get from refresh token
-        var user = _userManager.FindByIdAsync(userId.ToString()).Result;
-
-        var newAccessToken = GenerateAccessToken(user);
-        return Ok(new { AccessToken = newAccessToken });
-    }
-
-    #region Private Methods
-    private string GenerateAccessToken(User user)
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email!)
-        };
-
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)
-        );
-
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(15),
-            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    private string GenerateRefreshToken()
-    {
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
     #endregion
 }

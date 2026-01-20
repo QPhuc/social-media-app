@@ -4,8 +4,7 @@ public interface IUnitOfWork : IDisposable
 {
     IPostRepository Posts { get; }
     
-    Task<int> CompleteAsync();
-    Task BeginTransactionAsync();
+    Task<int> CompleteAsync();    Task<int> SaveChangesAsync();    Task BeginTransactionAsync();
     Task CommitAsync();
     Task RollbackAsync();
 }
